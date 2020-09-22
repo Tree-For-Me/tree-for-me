@@ -13,8 +13,6 @@ We will use Watson Discovery and Watson Assistant to build an app to find a comp
 
 </br>
 
-    npm install
-to install dependencies
+`npm install` to install dependencies
 
-    npm serve --open
-will run the app and open a webpage locally
+`npm serve --open` will run the app and open a webpage locally
