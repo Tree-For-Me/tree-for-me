@@ -5,17 +5,11 @@
     <h3 class=" text-center">Chat to find a plant for you</h3>
     <div class="messaging">
       <div class="inbox_msg">
-        <div class="mesgs">
+        <div class="msgs">
           <div class="msg_history">
             <li class="message" *ngFor="let message of messages">
-              <div
-                *ngIf="
-                  message.is_user == false;
-                  then incoming_msg;
-                  else outgoing_msg
-                "
-              ></div>
-              <ng-template #incoming_msg>
+              
+              <div *ngIf="!message.is_user; else userMsgBlock">
                 <div class="incoming_msg">
                   <div class="incoming_msg_img">
                     <img
@@ -29,8 +23,8 @@
                     </div>
                   </div>
                 </div>
-              </ng-template>
-              <ng-template #outgoing_msg>
+              </div>
+              <ng-template #userMsgBlock>
                 <div class="outgoing_msg">
                   <div class="sent_msg">
                     <p>{{ message.text }}</p>

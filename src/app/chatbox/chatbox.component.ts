@@ -16,8 +16,7 @@ export class ChatboxComponent implements OnInit {
 
   ngOnInit(): void {
     var initial_text = "Hello, this is Tree for Me.";
-    var msg: ChatMessage = {text: initial_text, is_user: false};
-    this.messages.push(msg);
+    this.messages.push(new ChatMessage(initial_text, false));
 
     this.computerMessages = ["Have you owned a plant before?", "How much light is in your room?"];
   }
@@ -26,23 +25,26 @@ export class ChatboxComponent implements OnInit {
     if (this.newMessage.trim() === '') {
       return;
     }
-
+    // Add message to window and clear the user input
     try {
-      this.addMessage(this.newMessage);
+      this.processUserMessage(this.newMessage);
       this.newMessage = '';
     } catch (err) {
       console.log(err);
     }
   }
 
-  addMessage(textStr: string): void {
-    var msg: ChatMessage = {text: textStr, is_user: true};
-    this.messages.push(msg);
+  processUserMessage(textStr: string): void {
+    this.messages.push(new ChatMessage(textStr, true));
+    this.sendNextComputerMessage()
 
+  }
+
+  private sendNextComputerMessage(): void {
     // Add computer message back, take string from beginning of array
     if (this.computerMessages.length > 0) {
-      var c_msg: ChatMessage = {text: this.computerMessages.shift(), is_user: false};
-      this.messages.push(c_msg);
+      var nextComputerText = this.computerMessages.shift();
+      this.messages.push(new ChatMessage(nextComputerText, false));
     }
   }
 
