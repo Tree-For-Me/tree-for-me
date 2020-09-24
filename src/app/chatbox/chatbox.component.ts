@@ -1,6 +1,6 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Component, OnInit } from '@angular/core';
-import { ChatMessage } from '../chat_message';
+import { ChatMessage } from '../models/chat_message';
 
 @Component({
   selector: 'app-chatbox',
