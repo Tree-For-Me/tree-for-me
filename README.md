@@ -13,8 +13,19 @@ We will use Watson Discovery and Watson Assistant to build an app to find a comp
 
 </br>
 
-`npm install` to install dependencies
+##### If you are new to Angular, the main code you need to change is inside: `/tree-for-me-web/src/app`
 
-`ng serve --open` will run the app and open a webpage locally
 
-Angular local setup instructions: https://angular.io/guide/setup-local
+Install the Angular CLI:
+`npm install -g @angular/cli`
+
+Go into top level folder:
+`cd tree-for-me-web`
+
+Install dependencies:
+`npm install`
+
+Run app and open a webpage locally:
+`ng serve --open`
+
+Detailed Angular local setup instructions: https://angular.io/guide/setup-local
