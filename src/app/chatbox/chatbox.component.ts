@@ -1,6 +1,7 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Component, OnInit } from '@angular/core';
 import { ChatMessage } from '../models/chat_message';
+import { WatsonMessagesService } from '../watson/watson-messages.service';
 
 @Component({
   selector: 'app-chatbox',
@@ -12,7 +13,8 @@ export class ChatboxComponent implements OnInit {
   newMessage = '';
 
   computerMessages: string[];
-  constructor() { }
+  
+  constructor(private messagesService: WatsonMessagesService) { }
 
   ngOnInit(): void {
     var initial_text = "Hello, this is Tree for Me.";
@@ -46,6 +48,13 @@ export class ChatboxComponent implements OnInit {
       var nextComputerText = this.computerMessages.shift();
       this.messages.push(new ChatMessage(nextComputerText, false));
     }
+
+    var msg;
+    this.messagesService.getMessage().subscribe((data) => {
+      console.log(data);
+      msg = data;
+    })
+
   }
 
 }
