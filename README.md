@@ -19,20 +19,20 @@ We will use Watson Discovery and Watson Assistant to build an app to find a comp
 
 ### Install instructions:
 
-To install Angular on your local system, you need the following:
+* To install Angular on your local system, you need the following:
 1. Node.js
 2. npm package manager - installed with Node.js by default. To check that you have the npm client installed, run npm -v in a terminal window.
 
-Install the Angular CLI:
+* Install the Angular CLI:
 `npm install -g @angular/cli`
 
-Go into top level folder:
+* Go into top level folder:
 `cd tree-for-me-web`
 
-Install dependencies:
+* Install dependencies:
 `npm install`
 
-Run app and open a webpage locally:
+* Run app and open a webpage locally:
 `ng serve --open`
 
-Detailed Angular local setup instructions: https://angular.io/guide/setup-local
+* Detailed Angular local setup instructions: https://angular.io/guide/setup-local
