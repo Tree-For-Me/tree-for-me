@@ -15,4 +15,6 @@ We will use Watson Discovery and Watson Assistant to build an app to find a comp
 
 `npm install` to install dependencies
 
-`npm serve --open` will run the app and open a webpage locally
+`ng serve --open` will run the app and open a webpage locally
+
+Angular local setup instructions: https://angular.io/guide/setup-local
