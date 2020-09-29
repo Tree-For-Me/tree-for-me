@@ -17,7 +17,7 @@ We will use Watson Discovery and Watson Assistant to build an app to find a comp
 
 </br>
 
-#### Install instructions:
+### Install instructions:
 
 Install the Angular CLI:
 `npm install -g @angular/cli`
