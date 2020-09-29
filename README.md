@@ -13,8 +13,11 @@ We will use Watson Discovery and Watson Assistant to build an app to find a comp
 
 </br>
 
-##### If you are new to Angular, the main code you need to change is inside: `/tree-for-me-web/src/app`
+##### If you are new to Angular, the main code you need to change is inside: "`/tree-for-me-web/src/app`"
 
+</br>
+
+#### Install instructions:
 
 Install the Angular CLI:
 `npm install -g @angular/cli`
