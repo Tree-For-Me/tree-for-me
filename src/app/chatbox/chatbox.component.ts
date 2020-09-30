@@ -1,7 +1,10 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Component, OnInit } from '@angular/core';
 import { ChatMessage } from '../models/chat_message';
+import { Plant } from '../models/plant';
+import { PlantInfo } from '../models/plant_info';
 import { WatsonMessagesService } from '../watson/watson-messages.service';
+import { WatsonPlantInfoService } from '../watson/watson-plant-info.service';
 
 @Component({
   selector: 'app-chatbox',
@@ -14,7 +17,7 @@ export class ChatboxComponent implements OnInit {
 
   computerMessages: string[];
   
-  constructor(private messagesService: WatsonMessagesService) { }
+  constructor(private messagesService: WatsonMessagesService, private plantInfoService: WatsonPlantInfoService) { }
 
   ngOnInit(): void {
     var initial_text = "Hello, this is Tree for Me.";
@@ -55,6 +58,17 @@ export class ChatboxComponent implements OnInit {
       msg = data;
     })
 
+    this.makePlantInfoRequest("fern", "bright indirect", true, true);
+
+  }
+
+  makePlantInfoRequest(flowerType: string, light: string, flowers: boolean, humidity: boolean) {
+    let plant = new PlantInfo(flowerType, light, flowers, humidity);
+    let plantName: Plant;
+    this.plantInfoService.plantInfoRequest(plant).subscribe((name) => {
+      console.log(name.plantName);
+      plantName = name;
+    })
   }
 
 }
