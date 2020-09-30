@@ -2,9 +2,9 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Component, OnInit } from '@angular/core';
 import { ChatMessage } from '../models/chat_message';
 import { Plant } from '../models/plant';
-import { PlantInfo } from '../models/plant_info';
 import { WatsonMessagesService } from '../watson/watson-messages.service';
 import { WatsonPlantInfoService } from '../watson/watson-plant-info.service';
+import { PlantInfo } from '../models/plant_info';
 
 @Component({
   selector: 'app-chatbox',
@@ -14,16 +14,25 @@ import { WatsonPlantInfoService } from '../watson/watson-plant-info.service';
 export class ChatboxComponent implements OnInit {
   messages: ChatMessage[] = [];
   newMessage = '';
-
-  computerMessages: string[];
+  convoStep = 0;
+  plantInfo : PlantInfo;
   
   constructor(private messagesService: WatsonMessagesService, private plantInfoService: WatsonPlantInfoService) { }
 
   ngOnInit(): void {
-    var initial_text = "Hello, this is Tree for Me.";
-    this.messages.push(new ChatMessage(initial_text, false));
-
-    this.computerMessages = ["Have you owned a plant before?", "How much light is in your room?"];
+	this.convoStep = 0;
+	this.plantInfo = new PlantInfo('', '', false, false);
+	
+	//welcome prompt
+	this.messagesService.getPromptMessage().subscribe((data) => {
+      this.messages.push(new ChatMessage(data.messageContent, false));
+    })
+	
+	// plant type
+	this.messagesService.getPlantTypeMessage().subscribe((data) => {
+      this.messages.push(new ChatMessage(data.messageContent, false));
+    })
+	
   }
 
   sendMessage() {
@@ -40,23 +49,46 @@ export class ChatboxComponent implements OnInit {
   }
 
   processUserMessage(textStr: string): void {
+	// display user message in chat box
     this.messages.push(new ChatMessage(textStr, true));
+	
+	// build plant info object with user responses
+	if (this.convoStep == 0) {
+      this.plantInfo.flowerType = textStr;
+	}
+	else if (this.convoStep == 1) {
+	  this.plantInfo.light = textStr;
+	}
+	else if (this.convoStep == 2) {
+      this.plantInfo.humidity = textStr === 'humid';
+    }
+	else if (this.convoStep == 3) {
+		this.plantInfo.flowers = textStr === 'flowers';
+	}
+	
+	
     this.sendNextComputerMessage()
 
   }
 
   private sendNextComputerMessage(): void {
-    // Add computer message back, take string from beginning of array
-    if (this.computerMessages.length > 0) {
-      var nextComputerText = this.computerMessages.shift();
-      this.messages.push(new ChatMessage(nextComputerText, false));
+    if (this.convoStep == 0) {
+	  this.messagesService.getSunMessage().subscribe((data) => {
+        this.messages.push(new ChatMessage(data.messageContent, false));
+      })
+	}
+	else if (this.convoStep == 1) {
+	  this.messagesService.getHumidityMessage().subscribe((data) => {
+        this.messages.push(new ChatMessage(data.messageContent, false));
+      })
+	}
+	else if (this.convoStep == 2) {
+	  this.messagesService.getFlowersMessage().subscribe((data) => {
+        this.messages.push(new ChatMessage(data.messageContent, false));
+      })
     }
 
-    var msg;
-    this.messagesService.getMessage().subscribe((data) => {
-      console.log(data);
-      msg = data;
-    })
+    this.convoStep++;
 
     this.makePlantInfoRequest("fern", "bright indirect", true, true);
 
@@ -69,6 +101,6 @@ export class ChatboxComponent implements OnInit {
       console.log(name.plantName);
       plantName = name;
     })
-  }
 
+  }
 }

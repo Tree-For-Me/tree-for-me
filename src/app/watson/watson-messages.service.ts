@@ -15,8 +15,28 @@ export class WatsonMessagesService {
 
   constructor(private http: HttpClient) { }
 
-  public getMessage(): Observable<Message> {
+  public getPromptMessage(): Observable<Message> {
     let url = '/getPromptMessage';
+    return this.http.get<Message>(API_URL + url);
+  }
+  
+  public getPlantTypeMessage(): Observable<Message> {
+    let url = '/getPlantTypeMessage';
+    return this.http.get<Message>(API_URL + url);
+  }
+  
+  public getSunMessage(): Observable<Message> {
+    let url = '/getSunMessage';
+    return this.http.get<Message>(API_URL + url);
+  }
+  
+  public getHumidityMessage(): Observable<Message> {
+    let url = '/getHumidityMessage';
+    return this.http.get<Message>(API_URL + url);
+  }
+  
+  public getFlowersMessage(): Observable<Message> {
+    let url = '/getFlowersMessage';
     return this.http.get<Message>(API_URL + url);
   }
 
