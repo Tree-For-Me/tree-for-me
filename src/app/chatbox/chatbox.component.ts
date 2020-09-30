@@ -49,23 +49,23 @@ export class ChatboxComponent implements OnInit {
   }
 
   processUserMessage(textStr: string): void {
-	// display user message in chat box
+	  // display user message in chat box
     this.messages.push(new ChatMessage(textStr, true));
 	
-	// build plant info object with user responses
-	if (this.convoStep == 0) {
-      this.plantInfo.flowerType = textStr;
-	}
-	else if (this.convoStep == 1) {
-	  this.plantInfo.light = textStr;
-	}
-	else if (this.convoStep == 2) {
-      this.plantInfo.humidity = textStr === 'humid';
+    // build plant info object with user responses
+    if (this.convoStep == 0) {
+        this.plantInfo.flowerType = textStr;
     }
-	else if (this.convoStep == 3) {
-		this.plantInfo.flowers = textStr === 'flowers';
-	}
-	
+    else if (this.convoStep == 1) {
+      this.plantInfo.light = textStr;
+    }
+    else if (this.convoStep == 2) {
+        this.plantInfo.humidity = textStr === 'humid';
+    }
+    else if (this.convoStep == 3) {
+      this.plantInfo.flowers = textStr === 'flowers';
+      this.makePlantInfoRequest(this.plantInfo);
+    }
 	
     this.sendNextComputerMessage()
 
@@ -76,31 +76,32 @@ export class ChatboxComponent implements OnInit {
 	  this.messagesService.getSunMessage().subscribe((data) => {
         this.messages.push(new ChatMessage(data.messageContent, false));
       })
-	}
-	else if (this.convoStep == 1) {
-	  this.messagesService.getHumidityMessage().subscribe((data) => {
-        this.messages.push(new ChatMessage(data.messageContent, false));
-      })
-	}
-	else if (this.convoStep == 2) {
-	  this.messagesService.getFlowersMessage().subscribe((data) => {
-        this.messages.push(new ChatMessage(data.messageContent, false));
-      })
     }
+    else if (this.convoStep == 1) {
+      this.messagesService.getHumidityMessage().subscribe((data) => {
+          this.messages.push(new ChatMessage(data.messageContent, false));
+        })
+    }
+    else if (this.convoStep == 2) {
+      this.messagesService.getFlowersMessage().subscribe((data) => {
+          this.messages.push(new ChatMessage(data.messageContent, false));
+        })
+      }
 
     this.convoStep++;
 
-    this.makePlantInfoRequest("fern", "bright indirect", true, true);
-
   }
 
-  makePlantInfoRequest(flowerType: string, light: string, flowers: boolean, humidity: boolean) {
-    let plant = new PlantInfo(flowerType, light, flowers, humidity);
-    let plantName: Plant;
+  makePlantInfoRequest(plant: PlantInfo) {
     this.plantInfoService.plantInfoRequest(plant).subscribe((name) => {
-      console.log(name.plantName);
-      plantName = name;
+      console.log('PLANT: ', name);
+      // When the plant is found print it to the user
+      this.showPlantToUser(name);
     })
+  }
 
+  showPlantToUser(plant: Plant) {
+    this.messages.push(new ChatMessage("We found the plant for you!", false));
+    this.messages.push(new ChatMessage(plant.plantName, false));
   }
 }
