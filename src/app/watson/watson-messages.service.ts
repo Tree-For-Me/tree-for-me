@@ -15,6 +15,21 @@ export class WatsonMessagesService {
 
   constructor(private http: HttpClient) { }
 
+  public getAssistantResponse(message: Message): Observable<Message> {
+    let url = '/getAssistantResponse';
+
+//     const paramsObj = new HttpParams()
+//     .set('messageContent', message.messageContent)
+//     .set('user', message.user)
+
+    return this.http.get<Message>(API_URL + url, { params: {
+          'messageContent': message.messageContent,
+          'user': message.user,
+          }
+        }
+        );
+  }
+
   public getPromptMessage(): Observable<Message> {
     let url = '/getPromptMessage';
     return this.http.get<Message>(API_URL + url);

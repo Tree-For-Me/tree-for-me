@@ -1,4 +1,4 @@
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { Message } from '../models/message';
 import { Component, OnInit } from '@angular/core';
 import { ChatMessage } from '../models/chat_message';
 import { Plant } from '../models/plant';
@@ -24,7 +24,7 @@ export class ChatboxComponent implements OnInit {
 	this.plantInfo = new PlantInfo('', '', false, false);
 	
 	//welcome prompt
-	this.messagesService.getPromptMessage().subscribe((data) => {
+	this.messagesService.getAssistantResponse(new Message("hello", "user")).subscribe((data) => {
       this.messages.push(new ChatMessage(data.messageContent, false));
     })
 	
