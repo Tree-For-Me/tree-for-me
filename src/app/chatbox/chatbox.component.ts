@@ -16,6 +16,8 @@ export class ChatboxComponent implements OnInit {
   newMessage = '';
   convoID: number = -1;
   plantInfo : PlantInfo;
+  plantResults: Plant[] = [];
+  plantDisplayStyle = {'display':'none'};
   
   constructor(private messagesService: WatsonMessagesService, private plantInfoService: WatsonPlantInfoService) { }
 
@@ -24,7 +26,7 @@ export class ChatboxComponent implements OnInit {
 	
 	//welcome prompt
 	this.messagesService.getAssistantResponse(new Message("", this.convoID)).subscribe((data) => {
-      this.convoID = data.user;
+      this.convoID = 0;
       this.messages.push(new ChatMessage(data.messageContent, false));
     })
 	
@@ -50,8 +52,13 @@ export class ChatboxComponent implements OnInit {
 	var responseMessage: Message;
 	this.messagesService.getAssistantResponse(new Message(textStr, this.convoID)).subscribe((data) => {
 	    responseMessage = data;
-        this.convoID = responseMessage.user;
-        this.sendNextComputerMessage(responseMessage.messageContent);
+	    if (responseMessage.user == -2) {
+	        this.makePlantInfoRequest();
+	        this.convoID = -1;
+	    } else {
+            this.convoID = responseMessage.user;
+            this.sendNextComputerMessage(responseMessage.messageContent);
+	    }
 	});
 
   }
@@ -62,16 +69,17 @@ export class ChatboxComponent implements OnInit {
 
   }
 
-  makePlantInfoRequest(plant: PlantInfo) {
-    this.plantInfoService.plantInfoRequest(plant).subscribe((name) => {
-      console.log('PLANT: ', name);
+  makePlantInfoRequest() {
+    this.plantInfoService.plantInfoRequest().subscribe((plants) => {
+      console.log('PLANTS: ', plants);
       // When the plant is found print it to the user
-      this.showPlantToUser(name);
+      this.showPlantToUser(plants);
     })
   }
 
-  showPlantToUser(plant: Plant) {
-    this.messages.push(new ChatMessage("We found the plant for you!", false));
-    this.messages.push(new ChatMessage(plant.plantName, false));
+  showPlantToUser(plants: Plant[]) {
+    this.messages.push(new ChatMessage("We found the plant for you! Please look below to find possible matches!", false));
+    this.plantResults = plants;
+    this.plantDisplayStyle = {'display':'initial'};
   }
 }

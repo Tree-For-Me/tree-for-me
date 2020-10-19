@@ -15,24 +15,16 @@ export class WatsonPlantInfoService {
   
   constructor(private http: HttpClient) { }
 
-  public plantInfoRequest(plantInfo: PlantInfo): Observable<Plant> {
+  public plantInfoRequest(): Observable<Plant[]> {
     let url = '/discovery/getPlantSearchResult';
 
-    const paramsObj = new HttpParams()
-    .set('flowerType', plantInfo.flowerType)
-    .set('light', plantInfo.light)
-    .set('flowers', plantInfo.flowers? "true":"false")
-    .set('humidity', plantInfo.humidity? "true":"false")
+//     const paramsObj = new HttpParams()
+//     .set('flowerType', plantInfo.flowerType)
+//     .set('light', plantInfo.light)
+//     .set('flowers', plantInfo.flowers? "true":"false")
+//     .set('humidity', plantInfo.humidity? "true":"false")
   
-    return this.http.get<Plant>(API_URL + url, { params: {
-      'flowerType': plantInfo.flowerType,
-      'light': plantInfo.light,
-      'flowers': plantInfo.flowers? "true":"false",
-      'humidity': plantInfo.humidity? "true":"false"
-      }
-      
-    }
-    );
+    return this.http.get<Plant[]>(API_URL + url);
   }
 
   stringToBoolean(stringValue: string): boolean | undefined {  
