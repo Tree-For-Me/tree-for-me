@@ -26,7 +26,7 @@ export class ChatboxComponent implements OnInit {
 	
 	//welcome prompt
 	this.messagesService.getAssistantResponse(new Message("", this.convoID)).subscribe((data) => {
-      this.convoID = 0;
+      this.convoID = data.user;
       this.messages.push(new ChatMessage(data.messageContent, false));
     })
 	
