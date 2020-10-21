@@ -52,16 +52,31 @@
     </div>
 </div>
 
-<div class="plantTable" [ngStyle]="plantDisplayStyle">
-  <table align="center" cellpadding="5">
-    <tr>
-      <td align="center" valign="center" *ngFor="let plant of plantResults">
-        <img width="50%" height="50%" [src]="plant.imageLink"/>
-        <br />
-        {{plant.plantName}}
-        <br />
-        {{plant.botName}}
-      </td>
-    </tr>
-  </table>
+<div class="paddedDiv" align="center">
+  <div [ngStyle]="plantDisplayStyle">
+    <table class="plantTable" align="center" cellpadding="5">
+      <tr>
+        <th class="plantCell" style="text-align:center">
+          Your New Plant!
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Botanical Name
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Care Link
+        </th>
+      </tr>
+      <tr *ngFor="let plant of plantResults">
+        <td class="plantCell" align="center" valign="center">
+          <img width="50%" height="50%" [src]="plant.imageLink"/>
+        </td>
+        <td class="plantCell" align="center" valign="center">
+          <i>{{plant.botName}}</i>
+        </td>
+        <td class="plantCell" align="center" valign="center">
+          <a href="https://www.guide-to-houseplants.com/house-plants-encyclopedia-a-z.html">{{plant.plantName}}</a>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>

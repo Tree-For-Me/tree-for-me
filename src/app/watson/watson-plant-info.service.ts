@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { environment } from '../../environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { Message } from '../models/message';
 import { PlantInfo } from '../models/plant_info';
 import { Plant } from '../models/plant';
 
@@ -15,7 +16,7 @@ export class WatsonPlantInfoService {
   
   constructor(private http: HttpClient) { }
 
-  public plantInfoRequest(): Observable<Plant[]> {
+  public plantInfoRequest(message: Message): Observable<Plant[]> {
     let url = '/discovery/getPlantSearchResult';
 
 //     const paramsObj = new HttpParams()
@@ -24,7 +25,11 @@ export class WatsonPlantInfoService {
 //     .set('flowers', plantInfo.flowers? "true":"false")
 //     .set('humidity', plantInfo.humidity? "true":"false")
   
-    return this.http.get<Plant[]>(API_URL + url);
+    return this.http.get<Plant[]>(API_URL + url, { params: {
+        'messageContent': message.messageContent,
+        'user': String(message.user),
+        }
+        });
   }
 
   stringToBoolean(stringValue: string): boolean | undefined {  

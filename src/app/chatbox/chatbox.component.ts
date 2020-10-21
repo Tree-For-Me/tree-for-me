@@ -70,7 +70,7 @@ export class ChatboxComponent implements OnInit {
   }
 
   makePlantInfoRequest() {
-    this.plantInfoService.plantInfoRequest().subscribe((plants) => {
+    this.plantInfoService.plantInfoRequest(new Message("plantRetrieval", this.convoID)).subscribe((plants) => {
       console.log('PLANTS: ', plants);
       // When the plant is found print it to the user
       this.showPlantToUser(plants);
