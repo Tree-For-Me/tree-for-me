@@ -113,3 +113,23 @@ img {
 .message {
 	list-style-type: none;
 }
+
+.paddedDiv {
+     padding:5px;
+}
+
+.plantTable {
+  border: 1px solid green;
+  margin: 5px;
+}
+
+.plantTable th {
+  background-color: green;
+  color: white;
+}
+
+.plantTable tr:nth-child(even){background-color: #f2f2f2;}
+
+.plantCell {
+  border: 1px solid green;
+}

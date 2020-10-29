@@ -1,4 +1,4 @@
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { Message } from '../models/message';
 import { Component, OnInit } from '@angular/core';
 import { ChatMessage } from '../models/chat_message';
 import { Plant } from '../models/plant';
@@ -14,22 +14,19 @@ import { PlantInfo } from '../models/plant_info';
 export class ChatboxComponent implements OnInit {
   messages: ChatMessage[] = [];
   newMessage = '';
-  convoStep = 0;
+  convoID: number = -1;
   plantInfo : PlantInfo;
+  plantResults: Plant[] = [];
+  plantDisplayStyle = {'display':'none'};
   
   constructor(private messagesService: WatsonMessagesService, private plantInfoService: WatsonPlantInfoService) { }
 
   ngOnInit(): void {
-	this.convoStep = 0;
 	this.plantInfo = new PlantInfo('', '', false, false);
 	
 	//welcome prompt
-	this.messagesService.getPromptMessage().subscribe((data) => {
-      this.messages.push(new ChatMessage(data.messageContent, false));
-    })
-	
-	// plant type
-	this.messagesService.getPlantTypeMessage().subscribe((data) => {
+	this.messagesService.getAssistantResponse(new Message("", this.convoID)).subscribe((data) => {
+      this.convoID = data.user;
       this.messages.push(new ChatMessage(data.messageContent, false));
     })
 	
@@ -51,57 +48,38 @@ export class ChatboxComponent implements OnInit {
   processUserMessage(textStr: string): void {
 	  // display user message in chat box
     this.messages.push(new ChatMessage(textStr, true));
-	
-    // build plant info object with user responses
-    if (this.convoStep == 0) {
-        this.plantInfo.flowerType = textStr;
-    }
-    else if (this.convoStep == 1) {
-      this.plantInfo.light = textStr;
-    }
-    else if (this.convoStep == 2) {
-        this.plantInfo.humidity = textStr === 'humid';
-    }
-    else if (this.convoStep == 3) {
-      this.plantInfo.flowers = textStr === 'flowers';
-      this.makePlantInfoRequest(this.plantInfo);
-    }
-	
-    this.sendNextComputerMessage()
+
+	var responseMessage: Message;
+	this.messagesService.getAssistantResponse(new Message(textStr, this.convoID)).subscribe((data) => {
+	    responseMessage = data;
+	    if (responseMessage.user == -2) {
+	        this.makePlantInfoRequest();
+	        this.convoID = -1;
+	    } else {
+            this.convoID = responseMessage.user;
+            this.sendNextComputerMessage(responseMessage.messageContent);
+	    }
+	});
 
   }
 
-  private sendNextComputerMessage(): void {
-    if (this.convoStep == 0) {
-	  this.messagesService.getSunMessage().subscribe((data) => {
-        this.messages.push(new ChatMessage(data.messageContent, false));
-      })
-    }
-    else if (this.convoStep == 1) {
-      this.messagesService.getHumidityMessage().subscribe((data) => {
-          this.messages.push(new ChatMessage(data.messageContent, false));
-        })
-    }
-    else if (this.convoStep == 2) {
-      this.messagesService.getFlowersMessage().subscribe((data) => {
-          this.messages.push(new ChatMessage(data.messageContent, false));
-        })
-      }
+  private sendNextComputerMessage(computerResponse: string): void {
 
-    this.convoStep++;
+      this.messages.push(new ChatMessage(computerResponse, false));
 
   }
 
-  makePlantInfoRequest(plant: PlantInfo) {
-    this.plantInfoService.plantInfoRequest(plant).subscribe((name) => {
-      console.log('PLANT: ', name);
+  makePlantInfoRequest() {
+    this.plantInfoService.plantInfoRequest(new Message("plantRetrieval", this.convoID)).subscribe((plants) => {
+      console.log('PLANTS: ', plants);
       // When the plant is found print it to the user
-      this.showPlantToUser(name);
+      this.showPlantToUser(plants);
     })
   }
 
-  showPlantToUser(plant: Plant) {
-    this.messages.push(new ChatMessage("We found the plant for you!", false));
-    this.messages.push(new ChatMessage(plant.plantName, false));
+  showPlantToUser(plants: Plant[]) {
+    this.messages.push(new ChatMessage("We found the plant for you! Please look below to find possible matches!", false));
+    this.plantResults = plants;
+    this.plantDisplayStyle = {'display':'initial'};
   }
 }

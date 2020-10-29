@@ -1,10 +1,10 @@
 export class Message {
-  constructor(messageContent: string, user: string) {
+  constructor(messageContent: string, user: number) {
     this.messageContent = messageContent;
     this.user = user;
   }
   
   messageContent: string;
-  user: string;
+  user: number;
 
 }
