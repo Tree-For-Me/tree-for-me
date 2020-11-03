@@ -53,6 +53,7 @@ export class ChatboxComponent implements OnInit {
 	this.messagesService.getAssistantResponse(new Message(textStr, this.convoID)).subscribe((data) => {
 	    responseMessage = data;
 	    if (responseMessage.user == -2) {
+			this.sendNextComputerMessage(responseMessage.messageContent);
 	        this.makePlantInfoRequest();
 	        this.convoID = -1;
 	    } else {
@@ -78,7 +79,7 @@ export class ChatboxComponent implements OnInit {
   }
 
   showPlantToUser(plants: Plant[]) {
-    this.messages.push(new ChatMessage("We found the plant for you! Please look below to find possible matches!", false));
+    this.messages.push(new ChatMessage("Please look below to find possible matches!", false));
     this.plantResults = plants;
     this.plantDisplayStyle = {'display':'initial'};
   }
