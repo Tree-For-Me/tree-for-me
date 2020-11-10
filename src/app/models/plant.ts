@@ -8,4 +8,5 @@ export class Plant {
   plantName: string;
   imageLink: string;
   botName: string;
+  careLink: string;
 }
