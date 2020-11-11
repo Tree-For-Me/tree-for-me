@@ -56,7 +56,7 @@ export class ChatboxComponent implements OnInit {
 	    this.messages.pop();
 	    var plantResultUser = 0;
         if (responseMessage.user == -2) {
-            var button = <HTMxLButtonElement> document.getElementById("submitButton");
+            var button = <HTMLButtonElement> document.getElementById("submitButton");
             var field = <HTMLButtonElement> document.getElementById("inputField");
             button.disabled = true;
             field.disabled = true;
