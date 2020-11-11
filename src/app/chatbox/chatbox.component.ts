@@ -53,11 +53,10 @@ export class ChatboxComponent implements OnInit {
 	var responseMessage: Message;
 	this.messagesService.getAssistantResponse(new Message(textStr, this.convoID)).subscribe((data) => {
 	    responseMessage = data;
-
 	    this.messages.pop();
 	    var plantResultUser = 0;
         if (responseMessage.user == -2) {
-            var button = <HTMLButtonElement> document.getElementById("submitButton");
+            var button = <HTMxLButtonElement> document.getElementById("submitButton");
             var field = <HTMLButtonElement> document.getElementById("inputField");
             button.disabled = true;
             field.disabled = true;
@@ -120,7 +119,7 @@ export class ChatboxComponent implements OnInit {
   }
 
   showPlantToUser(plants: Plant[]) {
-    this.messages.push(new ChatMessage("We found the plant for you! Please look below to find possible matches!", false));
+    this.messages.push(new ChatMessage("Please look to the right to find possible matches!", false));
     this.plantResults = plants;
   }
 }
