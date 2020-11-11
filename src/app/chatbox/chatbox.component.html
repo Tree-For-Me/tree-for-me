@@ -47,6 +47,7 @@
             <div class="type_msg">
               <form class="input_msg_write" (ngSubmit)="sendMessage()">
                 <input
+                  id="inputField"
                   type="text"
                   class="write_msg"
                   placeholder="Type a message"
@@ -54,7 +55,7 @@
                   maxlength="256"
                   [(ngModel)]="newMessage"
                 />
-                <button class="msg_send_btn" type="submit">
+                <button id="submitButton" class="msg_send_btn" type="submit">
                   <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
                 </button>
               </form>
@@ -91,7 +92,7 @@
         </tr>
       </table>
       <div>
-        <button class="resetButton" (click)="resetConversation()">Reset Conversation</button>
+        <button class="resetButton" (click)="resetConversation([])">Reset Conversation</button>
       </div>
     </div>
   </div>
