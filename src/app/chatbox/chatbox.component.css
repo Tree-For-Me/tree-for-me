@@ -106,7 +106,7 @@ img {
 }
 
 .msg_history {
-	height: 600px;
+	height: 25%;
 	overflow-y: auto;
 }
 
@@ -151,4 +151,8 @@ img {
   font-size: 16px;
   margin: 4px 2px;
   border-radius: 12px;
+}
+
+#inputField2 {
+  width: 90%;
 }

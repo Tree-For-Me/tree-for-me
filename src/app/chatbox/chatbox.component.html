@@ -3,7 +3,7 @@
 <div class="grid-container">
     <div class="content grid-child" role="main">
 
-      <h3 class=" text-center">Chat to find a plant for you</h3>
+      <h3 class=" text-center">Match twitter users with plants based on personality!</h3>
       <div class="messaging">
         <div class="inbox_msg">
           <div class="msgs">
@@ -45,17 +45,41 @@
               </li>
             </div>
             <div class="type_msg">
-              <form class="input_msg_write" (ngSubmit)="sendMessage()" autocomplete="off">
+              <form class="input_msg_write" (ngSubmit)="getTwitterPlant()" autocomplete="off">
                 <input
                   id="inputField"
                   type="text"
                   class="write_msg"
-                  placeholder="Type a message"
+                  placeholder="Enter a Twitter handle to find a matching plant!"
                   name="newMessage"
                   maxlength="256"
-                  [(ngModel)]="newMessage"
+                  [(ngModel)]="twitterHandle"
                 />
                 <button id="submitButton" class="msg_send_btn" type="submit">
+                  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class=" text-center">Match your own text with plants based on personality!</h3>
+      <div class="messaging">
+        <div class="inbox_msg">
+          <div class="msgs">
+            <div class="type_msg">
+              <form class="input_msg_write" (ngSubmit)="getTextPlant()" autocomplete="off">
+                <textarea
+                        id="inputField2"
+                        type="text"
+                        class="write_msg"
+                        placeholder="Enter at least 100 words to find a plant match!"
+                        name="newMessage"
+                        minlength="100"
+                        [(ngModel)]="userText"
+                ></textarea>
+                <button id="submitButton2" class="msg_send_btn" type="submit">
                   <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
                 </button>
               </form>
@@ -70,7 +94,7 @@
       <table class="plantTable" align="center" cellpadding="5">
         <tr>
           <th class="plantCell" style="text-align:center">
-            Your New Plant!
+            Plant Personality Match!
           </th>
           <th class="plantCell" style="text-align:center">
             Botanical Name

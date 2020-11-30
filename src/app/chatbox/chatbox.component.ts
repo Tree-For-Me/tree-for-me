@@ -4,6 +4,7 @@ import { ChatMessage } from '../models/chat_message';
 import { Plant } from '../models/plant';
 import { WatsonMessagesService } from '../watson/watson-messages.service';
 import { WatsonPlantInfoService } from '../watson/watson-plant-info.service';
+import { WatsonPersonalityService } from '../watson/watson-personality.service';
 import { PlantInfo } from '../models/plant_info';
 
 @Component({
@@ -14,20 +15,22 @@ import { PlantInfo } from '../models/plant_info';
 export class ChatboxComponent implements OnInit {
   messages: ChatMessage[] = [];
   newMessage = '';
+  twitterHandle = '';
+  userText = '';
   convoID: number = -1;
   plantInfo : PlantInfo;
   plantResults: Plant[] = [];
   
-  constructor(private messagesService: WatsonMessagesService, private plantInfoService: WatsonPlantInfoService) { }
+  constructor(private messagesService: WatsonMessagesService, private plantInfoService: WatsonPlantInfoService, private personalityService: WatsonPersonalityService) { }
 
   ngOnInit(): void {
 	this.plantInfo = new PlantInfo('', '', false, false);
 	
 	//welcome prompt
-	this.messagesService.getAssistantResponse(new Message("", this.convoID)).subscribe((data) => {
-      this.convoID = data.user;
-      this.messages.push(new ChatMessage(data.messageContent, false));
-    })
+// 	this.messagesService.getAssistantResponse(new Message("", this.convoID)).subscribe((data) => {
+//       this.convoID = data.user;
+//       this.messages.push(new ChatMessage(data.messageContent, false));
+//     })
 	
   }
 
@@ -43,6 +46,60 @@ export class ChatboxComponent implements OnInit {
       console.log(err);
     }
   }
+
+  getTwitterPlant() {
+
+    this.messages = [];
+      if (this.twitterHandle.trim() === '') {
+        return;
+      }
+      // Add message to window and clear the user input
+      try {
+        this.processTwitterRequest(this.twitterHandle);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+  processTwitterRequest(handle: string) {
+    this.personalityService.twitterPersonalityRequest(new Message(handle, this.convoID)).subscribe((plant) => {
+       console.log('PLANTS: ', plant);
+       // When the plant is found print it to the user
+       var test = [];
+       test.push(plant);
+       this.plantResults = test;
+     }, (err) => {
+        this.messages.push(new ChatMessage("Looks like they didn't have enough tweets... try a new user!", false));
+        this.plantResults = [];
+        })
+  }
+
+  getTextPlant() {
+
+      this.messages = [];
+        if (this.userText.trim() === '') {
+          return;
+        }
+        // Add message to window and clear the user input
+        try {
+          this.processTextRequest(this.userText);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
+    processTextRequest(text: string) {
+      this.personalityService.textPersonalityRequest(new Message(text, this.convoID)).subscribe((plant) => {
+         console.log('PLANTS: ', plant);
+         // When the plant is found print it to the user
+         var test = [];
+         test.push(plant);
+         this.plantResults = test;
+       }, (err) => {
+          this.messages.push(new ChatMessage("Looks like an error occurred... try typing more words!", false));
+          this.plantResults = [];
+          })
+    }
 
   processUserMessage(textStr: string): void {
 	  // display user message in chat box
@@ -88,18 +145,21 @@ export class ChatboxComponent implements OnInit {
   resetConversation(plants: Plant[]) {
     this.plantInfo = new PlantInfo('', '', false, false);
     this.messages = [];
-    this.plantResults = plants;
+    this.plantResults = [];
 
     var button = <HTMLButtonElement> document.getElementById("submitButton");
     var field = <HTMLButtonElement> document.getElementById("inputField");
     button.disabled = false;
     field.disabled = false;
 
+    this.twitterHandle = '';
+    this.userText = '';
+
     //welcome prompt
-    this.messagesService.getAssistantResponse(new Message("", -1)).subscribe((data) => {
-      this.convoID = data.user;
-      this.messages.push(new ChatMessage(data.messageContent, false));
-    })
+//     this.messagesService.getAssistantResponse(new Message("", -1)).subscribe((data) => {
+//       this.convoID = data.user;
+//       this.messages.push(new ChatMessage(data.messageContent, false));
+//     })
   }
 
   private sendNextComputerMessage(computerResponse: string): void {
