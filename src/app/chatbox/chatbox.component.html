@@ -1,82 +1,99 @@
 
 <!-- Toolbar -->
-<div class="content" role="main">
+<div class="grid-container">
+    <div class="content grid-child" role="main">
 
-    <h3 class=" text-center">Chat to find a plant for you</h3>
-    <div class="messaging">
-      <div class="inbox_msg">
-        <div class="msgs">
-          <div class="msg_history">
-            <li class="message" *ngFor="let message of messages">
-              
-              <div *ngIf="!message.is_user; else userMsgBlock">
-                <div class="incoming_msg">
-                  <div class="incoming_msg_img">
-                    <img
-                      src="https://i.imgur.com/k2PZLZa.png"
-                      alt="User avatar"
-                    />
-                  </div>
-                  <div class="received_msg">
-                    <div class="received_withd_msg">
-                      <p>{{ message.text }}</p>
+      <h3 class=" text-center">Chat to find a plant for you</h3>
+      <div class="messaging">
+        <div class="inbox_msg">
+          <div class="msgs">
+            <div id="messageBox" class="msg_history">
+              <li class="message" *ngFor="let message of messages">
+
+                <div *ngIf="!message.is_user; else userMsgBlock">
+                  <div *ngIf="message.imageLink; else textMessageBlock">
+                    <div class="received_msg">
+                      <div class="received_withd_msg">
+                        <img [src]="message.imageLink" width="15%"/>
+                      </div>
                     </div>
                   </div>
+
+                  <ng-template #textMessageBlock>
+                    <div class="incoming_msg">
+                      <div class="incoming_msg_img">
+                        <img
+                          src="https://i.imgur.com/k2PZLZa.png"
+                          alt="User avatar"
+                        />
+                      </div>
+                    </div>
+                    <div class="received_msg">
+                      <div class="received_withd_msg">
+                        <p>{{ message.text }}</p>
+                      </div>
+                    </div>
+                  </ng-template>
                 </div>
-              </div>
-              <ng-template #userMsgBlock>
-                <div class="outgoing_msg">
-                  <div class="sent_msg">
-                    <p>{{ message.text }}</p>
+                <ng-template #userMsgBlock>
+                  <div class="outgoing_msg">
+                    <div class="sent_msg">
+                      <p style="word-break: break-all">{{ message.text }}</p>
+                    </div>
                   </div>
-                </div>
-              </ng-template>
-            </li>
-          </div>
-          <div class="type_msg">
-            <form class="input_msg_write" (ngSubmit)="sendMessage()" autocomplete="off">
-              <input
-                type="text"
-                class="write_msg"
-                placeholder="Type a message"
-                name="newMessage"
-                [(ngModel)]="newMessage"
-              />
-              <button class="msg_send_btn" type="submit">
-                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-              </button>
-            </form>
+                </ng-template>
+              </li>
+            </div>
+            <div class="type_msg">
+              <form class="input_msg_write" (ngSubmit)="sendMessage()" autocomplete="off">
+                <input
+                  id="inputField"
+                  type="text"
+                  class="write_msg"
+                  placeholder="Type a message"
+                  name="newMessage"
+                  maxlength="256"
+                  [(ngModel)]="newMessage"
+                />
+                <button id="submitButton" class="msg_send_btn" type="submit">
+                  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-</div>
+  </div>
 
-<div class="paddedDiv" align="center">
-  <div [ngStyle]="plantDisplayStyle">
-    <table class="plantTable" align="center" cellpadding="5">
-      <tr>
-        <th class="plantCell" style="text-align:center">
-          Your New Plant!
-        </th>
-        <th class="plantCell" style="text-align:center">
-          Botanical Name
-        </th>
-        <th class="plantCell" style="text-align:center">
-          Care Link
-        </th>
-      </tr>
-      <tr *ngFor="let plant of plantResults">
-        <td class="plantCell" align="center" valign="center">
-          <img width="50%" height="50%" [src]="plant.imageLink"/>
-        </td>
-        <td class="plantCell" align="center" valign="center">
-          <i>{{plant.botName}}</i>
-        </td>
-        <td class="plantCell" align="center" valign="center">
-          <a href="https://www.guide-to-houseplants.com/house-plants-encyclopedia-a-z.html">{{plant.plantName}}</a>
-        </td>
-      </tr>
-    </table>
+  <div class="paddedDiv grid-child" align="center">
+    <div>
+      <table class="plantTable" align="center" cellpadding="5">
+        <tr>
+          <th class="plantCell" style="text-align:center">
+            Your New Plant!
+          </th>
+          <th class="plantCell" style="text-align:center">
+            Botanical Name
+          </th>
+          <th class="plantCell" style="text-align:center">
+            Care Link
+          </th>
+        </tr>
+        <tr *ngFor="let plant of plantResults">
+          <td class="plantCell" align="center" valign="center">
+            <img width="50%" height="50%" [src]="plant.imageLink"/>
+          </td>
+          <td class="plantCell" align="center" valign="center">
+            <i>{{plant.botName}}</i>
+          </td>
+          <td class="plantCell" align="center" valign="center">
+            <a [href]="plant.careLink">{{plant.plantName}}</a>
+          </td>
+        </tr>
+      </table>
+      <div>
+        <button class="resetButton" (click)="resetConversation([])">Reset Conversation</button>
+      </div>
+    </div>
   </div>
 </div>
