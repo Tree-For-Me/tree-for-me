@@ -76,7 +76,7 @@ export class ChatboxComponent implements OnInit {
                             this.plantResults = plants;
                         } else {
                             this.resetConversation(this.plantResults);
-                            this.messages.push(new ChatMessage("Hmmm, it looks like no plants fit all your criteria. Click the button on the right to start over.", false));
+                            this.messages.push(new ChatMessage("Hmmm, it looks like no plants fit all your criteria. Your most recent results are on the right.", false));
                         }
                     })
 
