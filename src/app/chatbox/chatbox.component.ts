@@ -6,6 +6,7 @@ import { WatsonMessagesService } from '../watson/watson-messages.service';
 import { WatsonPlantInfoService } from '../watson/watson-plant-info.service';
 import { WatsonPersonalityService } from '../watson/watson-personality.service';
 import { PlantInfo } from '../models/plant_info';
+import { Personality } from '../models/personality';
 
 @Component({
   selector: 'app-chatbox',
@@ -20,7 +21,9 @@ export class ChatboxComponent implements OnInit {
   convoID: number = -1;
   plantInfo : PlantInfo;
   plantResults: Plant[] = [];
-  
+  userPersonality: Personality;
+  plantPersonality: Personality;
+
   constructor(private messagesService: WatsonMessagesService, private plantInfoService: WatsonPlantInfoService, private personalityService: WatsonPersonalityService) { }
 
   ngOnInit(): void {
@@ -75,31 +78,33 @@ export class ChatboxComponent implements OnInit {
   }
 
   getTextPlant() {
-
-      this.messages = [];
-        if (this.userText.trim() === '') {
-          return;
-        }
-        // Add message to window and clear the user input
-        try {
-          this.processTextRequest(this.userText);
-        } catch (err) {
-          console.log(err);
-        }
+    this.messages = [];
+      if (this.userText.trim() === '') {
+        return;
       }
+      // Add message to window and clear the user input
+      try {
+        this.processTextRequest(this.userText);
+      } catch (err) {
+        console.log(err);
+      }
+  }
 
-    processTextRequest(text: string) {
-      this.personalityService.textPersonalityRequest(new Message(text, this.convoID)).subscribe((plant) => {
-         console.log('PLANTS: ', plant);
-         // When the plant is found print it to the user
-         var test = [];
-         test.push(plant);
-         this.plantResults = test;
-       }, (err) => {
-          this.messages.push(new ChatMessage("Looks like an error occurred... try typing more words!", false));
-          this.plantResults = [];
-          })
-    }
+  processTextRequest(text: string) {
+    this.personalityService.textPersonalityRequest(new Message(text, this.convoID)).subscribe((plant) => {
+        console.log('PLANTS: ', plant);
+        // When the plant is found print it to the user
+        var test = [];
+        test.push(plant);
+        this.plantResults = test;
+        this.plantPersonality = plant.plantPersonality
+        this.userPersonality = plant.userPersonality
+        console.log('plant personality: ', this.plantPersonality)
+      }, (err) => {
+        this.messages.push(new ChatMessage("Looks like an error occurred... try typing more words!", false));
+        this.plantResults = [];
+        })
+  }
 
   processUserMessage(textStr: string): void {
 	  // display user message in chat box
