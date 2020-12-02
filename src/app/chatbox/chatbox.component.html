@@ -120,4 +120,85 @@
       </div>
     </div>
   </div>
+
+  <div align="center">
+    <h3><strong>User Personality</strong></h3>
+    <table class="plantTable" cellpadding="5">
+      <tr>
+        <th class="plantCell" style="text-align:center">
+          Openness
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Conscientiousness
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Extraversion
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Agreeableness
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Neuroticism
+        </th>
+      </tr>
+      <tr *ngIf="userPersonality">
+        <td class="plantCell" valign="center">
+          {{ userPersonality.openness | percent:'1.1'}}
+        </td>
+        <td class="plantCell" valign="center">
+          {{ userPersonality.conscientiousness | percent:'1.1' }}
+        </td>
+        <td class="plantCell" valign="center">
+          {{ userPersonality.extraversion | percent:'1.1' }}
+        </td>
+        <td class="plantCell" valign="center">
+          {{ userPersonality.agreeableness | percent:'1.1' }}
+        </td>
+        <td class="plantCell" valign="center">
+          {{ userPersonality.neuroticism | percent:'1.1' }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div align="center">
+    <h3><strong>Plant Personality</strong></h3>
+    <table class="plantTable" cellpadding="5">
+      <tr>
+        <th class="plantCell" style="text-align:center">
+          Openness
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Conscientiousness
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Extraversion
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Agreeableness
+        </th>
+        <th class="plantCell" style="text-align:center">
+          Neuroticism
+        </th>
+      </tr>    
+      <tr *ngIf="plantPersonality">
+        <td class="plantCell" valign="center">
+          {{ plantPersonality.openness | percent:'1.1'}}
+        </td>
+        <td class="plantCell" valign="center">
+          {{ plantPersonality.conscientiousness | percent:'1.1' }}
+        </td>
+        <td class="plantCell" valign="center">
+          {{ plantPersonality.extraversion | percent:'1.1' }}
+        </td>
+        <td class="plantCell" valign="center">
+          {{ plantPersonality.agreeableness | percent:'1.1' }}
+        </td>
+        <td class="plantCell" valign="center">
+          {{ plantPersonality.neuroticism | percent:'1.1' }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
 </div>

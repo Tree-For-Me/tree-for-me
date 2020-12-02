@@ -187,4 +187,5 @@ export class ChatboxComponent implements OnInit {
     this.messages.push(new ChatMessage("Please look to the right to find possible matches!", false));
     this.plantResults = plants;
   }
+
 }
